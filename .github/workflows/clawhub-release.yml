@@ -47,6 +47,34 @@ jobs:
           fi
           echo "GitHub Actions OIDC environment variables are available."
 
+      - name: Verify ClawHub trusted publish token mint
+        run: |
+          oidc_response="$(curl --fail --silent --show-error \
+            -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" \
+            "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=clawhub")"
+          oidc_token="$(printf '%s' "${oidc_response}" | jq -r '.value')"
+
+          request_body="$(jq -n \
+            --arg packageName "@abdullah4ai/openclaw-tenant-bridge" \
+            --arg version "2026.4.14" \
+            --arg githubOidcToken "${oidc_token}" \
+            '{packageName:$packageName, version:$version, githubOidcToken:$githubOidcToken}')"
+
+          status="$(curl --silent --show-error --output /tmp/clawhub-mint-response.json \
+            --write-out '%{http_code}' \
+            -X POST \
+            -H 'content-type: application/json' \
+            --data "${request_body}" \
+            "${CLAWHUB_REGISTRY%/}/api/v1/publish/token/mint")"
+
+          if [[ "${status}" != "200" ]]; then
+            echo "Trusted publish token mint failed with HTTP ${status}." >&2
+            cat /tmp/clawhub-mint-response.json >&2
+            exit 1
+          fi
+
+          echo "ClawHub trusted publish token mint succeeded."
+
       - name: Publish to ClawHub
         run: |
           bun clawhub-source/packages/clawhub/src/cli.ts package publish . \
