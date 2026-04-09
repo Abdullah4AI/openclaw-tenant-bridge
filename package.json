@@ -1,6 +1,6 @@
 {
   "name": "@abdullah4ai/openclaw-tenant-bridge",
-  "version": "2026.4.13",
+  "version": "2026.4.14",
   "description": "OpenClaw multi-tenant shared memory bridge plugin",
   "license": "MIT",
   "repository": {

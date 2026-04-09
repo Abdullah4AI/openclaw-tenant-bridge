@@ -1,0 +1,45 @@
+name: ClawHub Release
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    env:
+      CLAWHUB_REGISTRY: https://clawhub.ai
+      CLAWHUB_REF: 4af2bd50a71465683dbf8aa269af764b9d39bdf5
+    steps:
+      - name: Checkout plugin
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.11
+
+      - name: Checkout ClawHub CLI source
+        uses: actions/checkout@v6
+        with:
+          repository: openclaw/clawhub
+          ref: ${{ env.CLAWHUB_REF }}
+          path: clawhub-source
+          fetch-depth: 1
+
+      - name: Install ClawHub CLI dependencies
+        working-directory: clawhub-source
+        run: bun install --frozen-lockfile
+
+      - name: Publish to ClawHub
+        run: |
+          bun clawhub-source/packages/clawhub/src/cli.ts package publish . \
+            --source-repo "${GITHUB_REPOSITORY}" \
+            --source-commit "${GITHUB_SHA}" \
+            --source-ref "${GITHUB_REF}" \
+            --source-path .
