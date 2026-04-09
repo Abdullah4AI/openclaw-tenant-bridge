@@ -1,5 +1,6 @@
 {
   "id": "tenant-bridge",
+  "name": "OpenClaw Tenant Bridge",
   "kind": "context-engine",
   "uiHints": {
     "tenantId": {
