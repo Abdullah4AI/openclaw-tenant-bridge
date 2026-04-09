@@ -1,6 +1,6 @@
 {
   "name": "@abdullah4ai/openclaw-tenant-bridge",
-  "version": "2026.4.15",
+  "version": "2026.4.16",
   "description": "OpenClaw multi-tenant shared memory bridge plugin",
   "displayName": "OpenClaw Tenant Bridge",
   "license": "MIT",
@@ -14,7 +14,9 @@
     "test": "vitest run"
   },
   "files": [
+    "LICENSE",
     "README.md",
+    "SECURITY.md",
     "api.ts",
     "index.test.ts",
     "index.ts",
@@ -65,5 +67,12 @@
     "extensions": [
       "./index.ts"
     ]
+  },
+  "pnpm": {
+    "overrides": {
+      "@hono/node-server": "1.19.13",
+      "axios": "1.15.0",
+      "tar": "7.5.13"
+    }
   }
 }
