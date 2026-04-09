@@ -1,6 +1,6 @@
 {
   "name": "@abdullah4ai/openclaw-tenant-bridge",
-  "version": "2026.4.9",
+  "version": "2026.4.10",
   "description": "OpenClaw multi-tenant shared memory bridge plugin",
   "license": "MIT",
   "repository": {
@@ -12,6 +12,17 @@
     "typecheck": "tsc -p tsconfig.json",
     "test": "vitest run"
   },
+  "files": [
+    ".gitignore",
+    "README.md",
+    "api.ts",
+    "index.test.ts",
+    "index.ts",
+    "openclaw.plugin.json",
+    "src",
+    "test-support",
+    "tsconfig.json"
+  ],
   "dependencies": {
     "zod": "^4.3.6"
   },
