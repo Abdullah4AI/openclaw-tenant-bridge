@@ -10,6 +10,9 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     env:
       CLAWHUB_REGISTRY: https://clawhub.ai
       CLAWHUB_REF: 4af2bd50a71465683dbf8aa269af764b9d39bdf5
@@ -35,6 +38,14 @@ jobs:
       - name: Install ClawHub CLI dependencies
         working-directory: clawhub-source
         run: bun install --frozen-lockfile
+
+      - name: Verify GitHub OIDC is available
+        run: |
+          if [[ -z "${ACTIONS_ID_TOKEN_REQUEST_URL:-}" || -z "${ACTIONS_ID_TOKEN_REQUEST_TOKEN:-}" ]]; then
+            echo "GitHub Actions OIDC environment variables are missing." >&2
+            exit 1
+          fi
+          echo "GitHub Actions OIDC environment variables are available."
 
       - name: Publish to ClawHub
         run: |
