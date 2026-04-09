@@ -1,0 +1,58 @@
+{
+  "name": "@abdullah4ai/openclaw-tenant-bridge",
+  "version": "2026.4.9",
+  "description": "OpenClaw multi-tenant shared memory bridge plugin",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Abdullah4AI/openclaw-tenant-bridge.git"
+  },
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/node": "^24.6.1",
+    "openclaw": "2026.4.9",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
+  },
+  "peerDependencies": {
+    "openclaw": ">=2026.4.9"
+  },
+  "peerDependenciesMeta": {
+    "openclaw": {
+      "optional": true
+    }
+  },
+  "optionalDependencies": {
+    "@aws-sdk/client-s3": "3.1024.0",
+    "pg": "^8.14.1"
+  },
+  "openclaw": {
+    "bundle": {
+      "stageRuntimeDependencies": true
+    },
+    "install": {
+      "minHostVersion": ">=2026.4.9"
+    },
+    "compat": {
+      "pluginApi": ">=2026.4.9",
+      "minGatewayVersion": "2026.4.9"
+    },
+    "build": {
+      "openclawVersion": "2026.4.9",
+      "pluginSdkVersion": "2026.4.9"
+    },
+    "release": {
+      "publishToClawHub": true
+    },
+    "extensions": [
+      "./index.ts"
+    ]
+  }
+}

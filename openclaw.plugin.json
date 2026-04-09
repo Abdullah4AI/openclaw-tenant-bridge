@@ -1,0 +1,155 @@
+{
+  "id": "tenant-bridge",
+  "kind": "context-engine",
+  "uiHints": {
+    "tenantId": {
+      "label": "Tenant ID",
+      "help": "Stable tenant identifier for this gateway instance."
+    },
+    "storage.databaseUrl": {
+      "label": "Database URL",
+      "help": "Postgres connection string. When omitted, the plugin falls back to local file-backed state."
+    },
+    "storage.bucket": {
+      "label": "Artifact Bucket",
+      "help": "S3 bucket name or local artifact directory path for stored bridge artifacts."
+    },
+    "bridge.allowedApps": {
+      "label": "Allowed Apps",
+      "help": "External app ids allowed to use the bridge HTTP API."
+    },
+    "bridge.serviceTokens": {
+      "label": "Service Tokens",
+      "help": "Map of app id to bearer token for plugin HTTP access."
+    },
+    "recall.defaultSurfaces": {
+      "label": "Default Recall Surfaces",
+      "help": "Default memory surfaces used when callers omit surfaces in retrieve requests."
+    },
+    "sync.materializeQmd": {
+      "label": "Materialize Markdown",
+      "help": "Write durable shared memory snapshots into markdown files for optional QMD indexing."
+    },
+    "sync.includeTranscripts": {
+      "label": "Include Transcripts",
+      "help": "Persist raw message-style deltas from bridge callers instead of only curated records."
+    }
+  },
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "tenantId": {
+        "type": "string",
+        "minLength": 1
+      },
+      "storage": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "databaseUrl": {
+            "type": "string"
+          },
+          "bucket": {
+            "type": "string"
+          },
+          "s3": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "endpoint": {
+                "type": "string"
+              },
+              "region": {
+                "type": "string"
+              },
+              "accessKeyId": {
+                "type": "string"
+              },
+              "secretAccessKey": {
+                "type": "string"
+              },
+              "forcePathStyle": {
+                "type": "boolean"
+              },
+              "prefix": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "bridge": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "allowedApps": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "serviceTokens": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "recall": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "defaultSurfaces": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["episodic", "durable", "artifact"]
+            }
+          },
+          "defaultLimit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 50
+          },
+          "maxResults": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "includeSystemPromptSummary": {
+            "type": "boolean"
+          }
+        }
+      },
+      "sync": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "materializeQmd": {
+            "type": "boolean"
+          },
+          "includeTranscripts": {
+            "type": "boolean"
+          },
+          "flushIntervalMs": {
+            "type": "integer",
+            "minimum": 100
+          },
+          "maintenanceIntervalMs": {
+            "type": "integer",
+            "minimum": 1000
+          },
+          "artifactTtlMs": {
+            "type": "integer",
+            "minimum": 1000
+          },
+          "qmdRelativeDir": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
